@@ -33,7 +33,7 @@ app.get("/", async (req, res) => {
 app.get("/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const employee = await Employee.find(id);
+    const employee = await Employee.find({_id:id});
   res.json(employee);
 
   } catch (err) {
@@ -56,6 +56,27 @@ app.post("/", async (req, res) => {
     }
     
 });
+app.put('/:id', async (req, res) => {
+    try {
+      const employee = await Employee.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+      res.json(employee);
+    } catch (err) {
+      res.send(err);
+    }
+  });
+  
+  app.delete('/:id', async (req, res) => {
+    try {
+      await Employee.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Employee deleted successfully' });
+    } catch (err) {
+      res.send(err);
+    }
+  });
 
 app.listen(3000, () => {
   console.log("server started at 3000 port");
